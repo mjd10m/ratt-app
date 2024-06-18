@@ -5,7 +5,7 @@ import {Routes, Route} from 'react-router-dom'
 import Dashboard from './pages/dashboard/index'
 import Topbar from './pages/global/Topbar'
 import Sidebar from './pages/global/Sidebar'
-//import CustIntk from './pages/global/CustIntk'
+import CustIntk from './pages/custIntake'
 
 function App() {
   const [theme, colorMode] = useMode()
@@ -19,7 +19,7 @@ function App() {
               <Topbar />
               <Routes>
                 <Route path="/" element = {<Dashboard/>} />
-                {/*<Route path="/customerIntake" element = {<CustIntk/>} />*/}
+                <Route path="/customerIntake" element = {<CustIntk/>} />
               </Routes>
             </main>
           </div>

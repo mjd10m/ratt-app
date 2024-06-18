@@ -6,7 +6,19 @@ import { Link } from "react-router-dom"
 import { tokens } from "../../theme"
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import FeedIcon from '@mui/icons-material/Feed';
 
+
+const Item = ({title, to, icon, selected, setselected}) => {
+    const theme = useTheme()
+    const colors = tokens(theme.palette.mode)
+    return(
+        <MenuItem active={selected === title} style= {{color: colors.grey[100]}} onClick={() => setselected(title)} icon={icon}>
+            <Typography>{title}</Typography>
+            <Link to = {to}/>
+        </MenuItem>
+    )
+}
 
 const Sidebar = () => {
     const theme = useTheme()
@@ -17,7 +29,7 @@ const Sidebar = () => {
 
     return (
         <Box sx={{
-            '&.pro-sidebar-inner':{
+            ".pro-sidebar-inner":{
                 background: `${colors.primary[400]} !important`
             },
             '& .pro-icon-wrapper': {
@@ -38,13 +50,18 @@ const Sidebar = () => {
                     <MenuItem onClick={()=> setIsCollapsed(!isCollapsed)} icon = {isCollapsed ? <MenuOutlinedIcon/> : undefined} style = {{margin: '10px 0 20px 0',color: colors.grey[100]}}>
                         {!isCollapsed && (
                             <Box display="flex" justifyContent="space-between" alignItems="center" ml="15px">
-                                <Typography>Michael</Typography>
-                                <IconButton>
+                                <Typography variant="h3" color={colors.grey[100]}>Michael</Typography>
+                                <IconButton onClick={()=> setIsCollapsed(!isCollapsed)}>
                                     <MenuOutlinedIcon/>
                                 </IconButton>
                             </Box>
                         )}
                     </MenuItem>
+                    {/* Menu Items */}
+                    <Box paddingLeft={isCollapsed ? undefined:"4%"}>
+                        <Item title= "Dashboard" to = "/" icon = {<HomeOutlinedIcon/>} selected={selected} setselected={setSelected}/>
+                        <Item title= "Customer Intake" to = "/customerIntake" icon = {<FeedIcon/>} selected={selected} setselected={setSelected}/>
+                    </Box>
                 </Menu>
             </ProSidebar>
         </Box>
