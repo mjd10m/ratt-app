@@ -129,7 +129,7 @@ export const themeSettings = (mode) => {
             ...(mode === 'dark'
             ? {
                 primary: {
-                    main: colors.primary[500]
+                    main: colors.primary[100]
                 },
                 secondary: {
                     main: colors.greenAccent[500]
@@ -186,7 +186,7 @@ export const themeSettings = (mode) => {
                 fontFamily: ["Plus Jakarta Sans", "sans-serif"].join(","),
                 fontSize: 14,
             }
-        }
+        },
     }
 }
 

@@ -11,7 +11,7 @@ import FeedIcon from '@mui/icons-material/Feed';
 
 const Item = ({title, to, icon, selected, setselected}) => {
     const theme = useTheme()
-    const colors = tokens(theme.palette.mode)
+    const colors = tokens("dark")
     return(
         <MenuItem active={selected === title} style= {{color: colors.grey[100]}} onClick={() => setselected(title)} icon={icon}>
             <Typography>{title}</Typography>
@@ -22,7 +22,7 @@ const Item = ({title, to, icon, selected, setselected}) => {
 
 const Sidebar = () => {
     const theme = useTheme()
-    const colors = tokens(theme.palette.mode)
+    const colors = tokens("dark")
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [selected, setSelected] = useState('Dashboard')
 
@@ -52,7 +52,7 @@ const Sidebar = () => {
                             <Box display="flex" justifyContent="space-between" alignItems="center" ml="15px">
                                 <Typography variant="h3" color={colors.grey[100]}>Michael</Typography>
                                 <IconButton onClick={()=> setIsCollapsed(!isCollapsed)}>
-                                    <MenuOutlinedIcon/>
+                                    <MenuOutlinedIcon style={{color: colors.grey[100]}}/>
                                 </IconButton>
                             </Box>
                         )}
