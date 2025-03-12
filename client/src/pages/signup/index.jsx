@@ -13,8 +13,9 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import Auth from '../../utils/auth'
 import axios from 'axios'
+import { jwtDecode } from 'jwt-decode';
 
-
+let showpage = false
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
@@ -62,6 +63,7 @@ export default function SignUp(props) {
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [nameError, setNameError] = React.useState(false);
   const [nameErrorMessage, setNameErrorMessage] = React.useState('');
+  const [showPage, setShowPage] = React.useState('');
   
   const API = axios.create({
     baseURL: 'http://localhost:5001/api', // 👈 your API base URL
@@ -71,13 +73,15 @@ export default function SignUp(props) {
   });
 
   const validateToken = async () => {
-    const token = await Auth.getSignupToken() 
+    const token = Auth.getSignupToken() 
     try {
-      const response = await API.post('/signup/validate', {
+      const response = await API.post('/signuptoken/validate', {
         token: token
       })
+      console.log(response.data.isValid)
+      setShowPage(response.data.isValid)
     } catch (error) {
-      
+      console.log(error)
     }
   }
   const validateInputs = () => {
@@ -130,9 +134,14 @@ export default function SignUp(props) {
       password: data.get('password'),
     });
   };
+  React.useEffect(() => {
+    validateToken();
+  }, []);
 
   return (
     <>
+    {showPage ? (
+      <>
       <CssBaseline enableColorScheme />
       <SignUpContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
@@ -208,6 +217,8 @@ export default function SignUp(props) {
           </Box>
         </Card>
       </SignUpContainer>
+      </>
+    ):(<div>Cant Render</div>)}
     </>
   );
 }

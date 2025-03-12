@@ -14,7 +14,7 @@ export const UserProvider = ({ children }) => {
       } catch (err) {
         console.error('Invalid token:', err);
         setUser(null);
-        navigate('/login',{ replace: true })
+        // navigate('/login',{ replace: true })
       }
   }, []);
 
