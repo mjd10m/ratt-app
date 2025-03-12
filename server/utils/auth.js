@@ -27,14 +27,14 @@ module.exports = {
     return req;
   },
 
-  signToken: function({ username }) {
-    const payload = { username };
+  signToken: function({ username, firstName, role }) {
+    const payload = { username, firstName, role };
     return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
   },
-  // signupToken: function(email) {
-  //   const payload = {email}
-  //   return jwt.sign({data:payload}, secret, {expiresIn: expiration})
-  // },
+  signupToken: function(email, company, role) {
+    const payload = {email, company, role}
+    return jwt.sign({data:payload}, secret, {expiresIn: expiration})
+  },
   // checkSignupToken: function(token) {
   //   try {
   //     jwt.verify(token, secret)

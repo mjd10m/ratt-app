@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import {ProSidebar, Menu, MenuItem} from 'react-pro-sidebar'
 import 'react-pro-sidebar/dist/css/styles.css'
 import { Box, IconButton, Typography, useTheme} from '@mui/material'
@@ -7,6 +7,8 @@ import { tokens } from "../../theme"
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import FeedIcon from '@mui/icons-material/Feed';
+import { UserContext } from "../../context/UserContext"
+
 
 
 const Item = ({title, to, icon, selected, setselected}) => {
@@ -23,9 +25,9 @@ const Item = ({title, to, icon, selected, setselected}) => {
 const Sidebar = () => {
     const theme = useTheme()
     const colors = tokens("dark")
+    const {user} = useContext(UserContext);
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [selected, setSelected] = useState('Dashboard')
-
 
     return (
         <Box sx={{
@@ -50,7 +52,7 @@ const Sidebar = () => {
                     <MenuItem onClick={()=> setIsCollapsed(!isCollapsed)} icon = {isCollapsed ? <MenuOutlinedIcon/> : undefined} style = {{margin: '10px 0 20px 0',color: colors.grey[100]}}>
                         {!isCollapsed && (
                             <Box display="flex" justifyContent="space-between" alignItems="center" ml="15px">
-                                <Typography variant="h3" color={colors.grey[100]}>Michael</Typography>
+                                <Typography variant="h3" color={colors.grey[100]}>{user?.firstName}</Typography>
                                 <IconButton onClick={()=> setIsCollapsed(!isCollapsed)}>
                                     <MenuOutlinedIcon style={{color: colors.grey[100]}}/>
                                 </IconButton>

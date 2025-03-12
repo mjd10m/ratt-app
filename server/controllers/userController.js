@@ -1,5 +1,5 @@
 const { User } = require('../models');
-const { signToken } = require('../utils/auth');
+const { signToken, signupToken } = require('../utils/auth');
 
 // Get all users
 const getAllUsers = async (req, res) => {
@@ -34,13 +34,38 @@ const loginUser = async (req, res) => {
       return res.status(401).json({message: "Incorrect Credentials"})
     }
     const token = signToken(user)
+    res.status(200).json({
+      message: 'Login successful',
+      user: {
+        id: user.id,
+        username: user.username,
+        firstName: user.firstName,
+        email: user.email,
+        role: user.role,
+      },
+      token,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+const userSignupToken = async (req,res) => {
+  try {
+    const {email, company, role } = req.body
+    const token = signupToken(email, company, role)
+    res.status(200).json({
+      message: 'Signup token created successful',
+      token
+    })
+  } catch (error) {
+    res.status(500).json({error: error.message})
   }
 }
 
 module.exports = {
   getAllUsers,
   createUser,
-  loginUser
+  loginUser,
+  userSignupToken
 };

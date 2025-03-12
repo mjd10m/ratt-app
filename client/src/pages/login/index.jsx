@@ -13,6 +13,7 @@ import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import ForgotPassword from '../../components/forgotPassword';
+import axios from 'axios'
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -55,11 +56,13 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignIn(props) {
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
+  const [usernameError, setUsernameError] = React.useState(false);
+  const [usernameErrorMessage, setUsernameErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [open, setOpen] = React.useState(false);
+  const [loginError, setloginError] = React.useState(false);
+  const [loginErrorMessage, setLoginErrorMessage] = React.useState('');
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -68,33 +71,55 @@ export default function SignIn(props) {
   const handleClose = () => {
     setOpen(false);
   };
+  const API = axios.create({
+    baseURL: 'http://localhost:5001/api', // 👈 your API base URL
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    setloginError(false)
      event.preventDefault();
-    if (emailError || passwordError) {
+    if (usernameError || passwordError) {
       event.preventDefault();
       return;
     }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const data = {
+      username: document.getElementById('username').value,
+      password: document.getElementById('password').value,
+    };
+    try {
+      const response = await API.post('/login', {
+        username: data.username,
+        password: data.password,
+      });
+  
+      console.log('Login success:', response.data);
+      localStorage.setItem('id_token', response.data.token);
+      window.location.assign('/')
+    } catch (error) {
+      console.error('Login error:', error.response?.data || error.message);
+      setloginError(true)
+      setLoginErrorMessage(error.response?.data.message|| error.message)
+    }
+    console.log(data)
+
   };
 
   const validateInputs = () => {
-    const email = document.getElementById('email');
+    const username = document.getElementById('username');
     const password = document.getElementById('password');
 
     let isValid = true;
 
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address.');
+    if (!username.value || username.value.length < 6) {
+      setUsernameError(true);
+      setUsernameErrorMessage('Username must be at least 6 characters long.');
       isValid = false;
     } else {
-      setEmailError(false);
-      setEmailErrorMessage('');
+      setUsernameError(false);
+      setUsernameErrorMessage('');
     }
 
     if (!password.value || password.value.length < 6) {
@@ -133,20 +158,19 @@ export default function SignIn(props) {
             }}
           >
             <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
+              <FormLabel htmlFor="username">Username</FormLabel>
               <TextField
-                error={emailError}
-                helperText={emailErrorMessage}
-                id="email"
-                type="email"
-                name="email"
-                placeholder="your@email.com"
-                autoComplete="email"
+                error={usernameError}
+                helperText={usernameErrorMessage}
+                id="username"
+                type="text"
+                name="username"
+                autoComplete="username"
                 autoFocus
                 required
                 fullWidth
                 variant="outlined"
-                color={emailError ? 'error' : 'primary'}
+                color={usernameError ? 'error' : 'primary'}
               />
             </FormControl>
             <FormControl>
@@ -179,6 +203,14 @@ export default function SignIn(props) {
             >
               Sign in
             </Button>
+            {loginError && (
+              <Typography
+                variant="body2"
+                color="error"
+                sx={{ mt: 1, textAlign: 'center', }}
+              > {loginErrorMessage}
+              </Typography>
+            )}
             <Link
               component="button"
               type="button"
