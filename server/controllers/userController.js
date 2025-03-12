@@ -1,5 +1,5 @@
 const { User } = require('../models');
-const { signToken, signupToken } = require('../utils/auth');
+const { signToken, signupToken, checkSignupToken } = require('../utils/auth');
 
 // Get all users
 const getAllUsers = async (req, res) => {
@@ -50,7 +50,7 @@ const loginUser = async (req, res) => {
   }
 };
 
-const userSignupToken = async (req,res) => {
+const createSignupToken = async (req,res) => {
   try {
     const {email, company, role } = req.body
     const token = signupToken(email, company, role)
@@ -63,9 +63,31 @@ const userSignupToken = async (req,res) => {
   }
 }
 
+const validateSignupToken = async (req, res) => {
+  try {
+    const {token} = req.body
+    const isValid = checkSignupToken(token)
+    if(isValid){
+      res.status(200).json({
+        message: 'Valid Token',
+        token,
+        isValid
+      })
+    } else {
+      res.status(403).json({
+        message: 'Invalid Token',
+        isValid
+      })
+    }
+  } catch (error) {
+    res.status(500).json({error: error.message})
+  }
+}
+
 module.exports = {
   getAllUsers,
   createUser,
   loginUser,
-  userSignupToken
+  createSignupToken,
+  validateSignupToken
 };

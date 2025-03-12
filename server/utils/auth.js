@@ -35,14 +35,14 @@ module.exports = {
     const payload = {email, company, role}
     return jwt.sign({data:payload}, secret, {expiresIn: expiration})
   },
-  // checkSignupToken: function(token) {
-  //   try {
-  //     jwt.verify(token, secret)
-  //     console.log("true")
-  //     return true
-  //   } catch (err) {
-  //     console.log("false")
-  //     return false
-  //   }
-  // }
+  checkSignupToken: function(token) {
+    try {
+      jwt.verify(token, secret)
+      console.log("true")
+      return true
+    } catch (err) {
+      console.log("false")
+      return false
+    }
+  }
 };

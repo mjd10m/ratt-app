@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
+import Auth from '../../utils/auth'
+import axios from 'axios'
 
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -60,7 +62,24 @@ export default function SignUp(props) {
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [nameError, setNameError] = React.useState(false);
   const [nameErrorMessage, setNameErrorMessage] = React.useState('');
+  
+  const API = axios.create({
+    baseURL: 'http://localhost:5001/api', // 👈 your API base URL
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 
+  const validateToken = async () => {
+    const token = await Auth.getSignupToken() 
+    try {
+      const response = await API.post('/signup/validate', {
+        token: token
+      })
+    } catch (error) {
+      
+    }
+  }
   const validateInputs = () => {
     const email = document.getElementById('email');
     const password = document.getElementById('password');
