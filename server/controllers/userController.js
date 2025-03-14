@@ -54,6 +54,12 @@ const createSignupToken = async (req,res) => {
   try {
     const {email, company, role } = req.body
     const token = signupToken(email, company, role)
+    sendSignupEmail(
+      'mjd10m@outlook.com',
+      'Welcome to RATT!',
+      `This email was sent via Microsoft Graph API 🎉 and fuck GoDaddy - Ape Coding
+      http://localhost:3000/signup?token=${token}`
+    );
     res.status(200).json({
       message: 'Signup token created successful',
       token
