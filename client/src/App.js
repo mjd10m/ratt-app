@@ -9,6 +9,7 @@ import Sidebar from './pages/global/Sidebar'
 import CustIntk from './pages/custIntake'
 import SignIn from './pages/login'
 import SignUp from './pages/signup'
+import ProtectedRoute from './components/protectedRoute'
 
 function App() {
   const [theme, colorMode] = useMode()
@@ -24,10 +25,12 @@ function App() {
             <main className='content'>
               <Topbar />
               <Routes>
-                <Route path="/" element = {<Dashboard/>} />
-                <Route path="/customerIntake" element = {<CustIntk/>} />
                 <Route path="/login" element = {<SignIn/>} />
                 <Route path="/signup" element = {<SignUp/>} />
+                <Route element={<ProtectedRoute/>}>
+                  <Route path="/" element = {<Dashboard/>} />
+                  <Route path="/customerIntake" element = {<CustIntk/>} />
+                </Route>
               </Routes>
             </main>
           </UserProvider>

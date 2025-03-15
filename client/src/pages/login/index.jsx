@@ -14,6 +14,7 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import ForgotPassword from '../../components/forgotPassword';
 import axios from 'axios'
+import Auth from '../../utils/auth';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -96,7 +97,7 @@ export default function SignIn(props) {
       });
   
       console.log('Login success:', response.data);
-      localStorage.setItem('id_token', response.data.token);
+      Auth.login(response.data.token);
       window.location.assign('/')
     } catch (error) {
       console.error('Login error:', error.response?.data || error.message);

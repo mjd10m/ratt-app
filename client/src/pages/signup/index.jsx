@@ -15,7 +15,6 @@ import Auth from '../../utils/auth'
 import axios from 'axios'
 import { jwtDecode } from 'jwt-decode';
 
-let showpage = false
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
@@ -57,13 +56,14 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignUp(props) {
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
+  const [usernameError, setUsernameError] = React.useState(false);
+  const [usernameErrorMessage, setUsernameErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [nameError, setNameError] = React.useState(false);
   const [nameErrorMessage, setNameErrorMessage] = React.useState('');
   const [showPage, setShowPage] = React.useState('');
+  const [tokenData, setTokenData] = React.useState()
   
   const API = axios.create({
     baseURL: 'http://localhost:5001/api', // 👈 your API base URL
@@ -78,26 +78,29 @@ export default function SignUp(props) {
       const response = await API.post('/signuptoken/validate', {
         token: token
       })
-      console.log(response.data.isValid)
       setShowPage(response.data.isValid)
+      if(response.data.isValid) {
+        const { data: { email, company, role } } = jwtDecode(token)
+        setTokenData({ email, company, role })
+      }
     } catch (error) {
       console.log(error)
     }
   }
   const validateInputs = () => {
-    const email = document.getElementById('email');
+    const username = document.getElementById('username');
     const password = document.getElementById('password');
     const name = document.getElementById('name');
 
     let isValid = true;
 
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address.');
+    if (!username.value || username.value.length < 6) {
+      setUsernameError(true);
+      setUsernameErrorMessage('Username must be at least 6 characters long.');
       isValid = false;
     } else {
-      setEmailError(false);
-      setEmailErrorMessage('');
+      setUsernameError(false);
+      setUsernameErrorMessage('');
     }
 
     if (!password.value || password.value.length < 6) {
@@ -121,18 +124,35 @@ export default function SignUp(props) {
     return isValid;
   };
 
-  const handleSubmit = (event) => {
-    if (nameError || emailError || passwordError) {
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    if (nameError || usernameError || passwordError) {
       event.preventDefault();
       return;
     }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get('name'),
-      lastName: data.get('lastName'),
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const name = document.getElementById('name').value;
+    const nameArr = name.split(' ')
+    const user = {
+      username,
+      email: tokenData.email,
+      password,
+      firstName: nameArr[0],
+      lastName: nameArr[1],
+      company: tokenData.company,
+      role: tokenData.role,
+      companyBanner: "stuff",
+      status: true
+    }
+    try {
+      const res = await API.post('/users', user);
+      console.log('User created:', res.data);
+      Auth.login(res.data.token)
+      window.location.assign('/')
+    } catch (err) {
+      console.error('Error:', err);
+    }
   };
   React.useEffect(() => {
     validateToken();
@@ -172,18 +192,18 @@ export default function SignUp(props) {
               />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
+              <FormLabel htmlFor="email">Username</FormLabel>
               <TextField
                 required
                 fullWidth
-                id="email"
-                placeholder="your@email.com"
-                name="email"
-                autoComplete="email"
+                id="username"
+                placeholder=""
+                name="username"
+                autoComplete=""
                 variant="outlined"
-                error={emailError}
-                helperText={emailErrorMessage}
-                color={passwordError ? 'error' : 'primary'}
+                error={usernameError}
+                helperText={usernameErrorMessage}
+                color={usernameError ? 'error' : 'primary'}
               />
             </FormControl>
             <FormControl>
@@ -202,10 +222,6 @@ export default function SignUp(props) {
                 color={passwordError ? 'error' : 'primary'}
               />
             </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="allowExtraEmails" color="primary" />}
-              label="I want to receive updates via email."
-            />
             <Button
               type="submit"
               fullWidth
@@ -218,7 +234,13 @@ export default function SignUp(props) {
         </Card>
       </SignUpContainer>
       </>
-    ):(<div>Cant Render</div>)}
+    ):(<Typography
+      component="h1"
+      variant="h5"
+      sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)', display: 'flex', justifyContent: 'center'}}
+      >
+      Invalid or Expired Token, please contact Administrator
+    </Typography>)}
     </>
   );
 }
