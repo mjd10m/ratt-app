@@ -6,6 +6,7 @@ import { Link } from "react-router-dom"
 import { tokens } from "../../theme"
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import FeedIcon from '@mui/icons-material/Feed';
 import { UserContext } from "../../context/UserContext"
 
@@ -63,6 +64,7 @@ const Sidebar = () => {
                     <Box paddingLeft={isCollapsed ? undefined:"4%"}>
                         <Item title= "Dashboard" to = "/" icon = {<HomeOutlinedIcon/>} selected={selected} setselected={setSelected}/>
                         <Item title= "Customer Intake" to = "/customerIntake" icon = {<FeedIcon/>} selected={selected} setselected={setSelected}/>
+                        <Item title= "Admin" to = "/admin" icon = {<SupervisorAccountIcon/>} selected={selected} setselected={setSelected}/>
                     </Box>
                 </Menu>
             </ProSidebar>

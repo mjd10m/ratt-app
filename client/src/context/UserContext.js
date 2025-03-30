@@ -6,6 +6,7 @@ export const UserContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate()
   const location = useLocation()
   useEffect(() => {
@@ -17,13 +18,16 @@ export const UserProvider = ({ children }) => {
         setUser(null);
         const isSignup = location.pathname.includes('signup');
         if(!isSignup){
+          console.log("Go to login")
           navigate('/login',{ replace: true })  
         } 
+      } finally {
+        setLoading(false);
       }
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, loading }}>
       {children}
     </UserContext.Provider>
   );

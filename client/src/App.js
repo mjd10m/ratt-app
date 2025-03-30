@@ -27,7 +27,7 @@ function App() {
               <Routes>
                 <Route path="/login" element = {<SignIn/>} />
                 <Route path="/signup" element = {<SignUp/>} />
-                <Route element={<ProtectedRoute/>}>
+                <Route allowedRoles={['admin']} element={<ProtectedRoute/>}>
                   <Route path="/" element = {<Dashboard/>} />
                   <Route path="/customerIntake" element = {<CustIntk/>} />
                 </Route>
