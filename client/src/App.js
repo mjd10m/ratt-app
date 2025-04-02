@@ -9,6 +9,7 @@ import Sidebar from './pages/global/Sidebar'
 import CustIntk from './pages/custIntake'
 import SignIn from './pages/login'
 import SignUp from './pages/signup'
+import Admin from './pages/admin'
 import ProtectedRoute from './components/protectedRoute'
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
                 <Route allowedRoles={['admin']} element={<ProtectedRoute/>}>
                   <Route path="/" element = {<Dashboard/>} />
                   <Route path="/customerIntake" element = {<CustIntk/>} />
+                  <Route path="/admin" element = {<Admin/>} />
                 </Route>
               </Routes>
             </main>
