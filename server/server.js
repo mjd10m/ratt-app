@@ -2,13 +2,12 @@ require('dotenv').config();
 const express = require('express')
 const cors = require('cors');
 const app = express();
-const userRoutes = require('./routes/userRoutes');
-const sendSignupEmail = require('./utils/signupEmail')
+const apiRoutes = require('./routes/index');
 
 // Middleware
 app.use(express.json());
 app.use(cors())
-app.use('/api', userRoutes);
+app.use(apiRoutes);
 
 const sequelize = require('./config/database');
 

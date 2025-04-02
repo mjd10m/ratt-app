@@ -25,15 +25,11 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  company: {
-    type: DataTypes.STRING,
+  companyId: {
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   role: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  companyBanner: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -58,6 +54,10 @@ const User = sequelize.define('User', {
     }
   }
 });
+
+User.associate = (models) => {
+  User.belongsTo(models.Company, { foreignKey: 'companyId' });
+};
 
 User.prototype.isCorrectPassword = async function(password) {
   return bcrypt.compare(password, this.password);

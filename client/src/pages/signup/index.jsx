@@ -140,9 +140,8 @@ export default function SignUp(props) {
       password,
       firstName: nameArr[0],
       lastName: nameArr[1],
-      company: tokenData.company,
+      companyId: tokenData.company,
       role: tokenData.role,
-      companyBanner: "stuff",
       status: true
     }
     try {

@@ -15,8 +15,8 @@ const getAllUsers = async (req, res) => {
 // Create a new user
 const createUser = async (req, res) => {
   try {
-    const { username, email, password, firstName, lastName, company, role, companyBanner, status } = req.body;
-    const user = await User.create({ username, email, password, firstName, lastName, company, role, companyBanner, status });
+    const { username, email, password, firstName, lastName, companyId, role, status } = req.body;
+    const user = await User.create({ username, email, password, firstName, lastName, companyId, role, status });
     const token = signToken(user)
     res.status(200).json({
       message: 'Signup & Login successful',
@@ -64,10 +64,10 @@ const loginUser = async (req, res) => {
 
 const createSignupToken = async (req,res) => {
   try {
-    const {email, company, role } = req.body
-    const token = signupToken(email, company, role)
+    const {email, companyId, role } = req.body
+    const token = signupToken(email, companyId, role)
     sendSignupEmail(
-      'mjd10m@outlook.com',
+      email,
       'Welcome to RATT!',
       `This email was sent via Microsoft Graph API 🎉 and fuck GoDaddy - Ape Coding
       http://localhost:3000/signup?token=${token}`
