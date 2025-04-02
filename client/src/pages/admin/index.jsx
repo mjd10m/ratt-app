@@ -7,10 +7,9 @@ import { useTheme } from "@emotion/react";
 import { tokens } from "../../theme"
 
 const initialFormState = {
-    firstName: '',
-    lastName: '',
     email:'',
-		company: ''
+		company: '',
+		role: ''
 }
 
 const Admin = () => {
@@ -22,10 +21,9 @@ const Admin = () => {
 		console.log(values)
 	}
 	const formSchema = yup.object().shape({
-		firstName: yup.string().required("Required"),
-		lastName: yup.string().required("Required"),
 		email: yup.string().email('Invalid email address').required('Required'),
-		company: yup.string().required("Required")
+		company: yup.string().required("Required"),
+		role: yup.string().required("Required")
 	})
 	return(
 		<Box m="20px">
@@ -35,12 +33,15 @@ const Admin = () => {
 				{({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
 					<form onSubmit={handleSubmit}>
 						<Box display="flex" justifyContent="space-between" paddingBottom = "20px">
-							<TextField  sx={{m: "0 0 5px 0" }} fullWidth color={"primary"} InputLabelProps={{shrink: true}} variant="outlined" id="firstName" name="firstName" label="First Name" type="text" onChange={handleChange} value={values.firstName} error={touched.firstName && Boolean(errors.firstName)} helperText={touched.firstName && errors.firstName}/>
-							<TextField fullWidth color={"primary"} InputLabelProps={{shrink: true}} variant="outlined" label="Last Name" id="lastName" name="lastName" type="text" onChange={handleChange} value={values.lastName} error={touched.lastName && Boolean(errors.lastName)} helperText={touched.lastName && errors.lastName}/>
 							<TextField fullWidth color={"primary"} InputLabelProps={{shrink: true}} variant="outlined" label="Email" id="email" name="email" type="email" onChange={handleChange} value={values.email} error={touched.email && Boolean(errors.email)} helperText={touched.email && errors.email}/>
 							<TextField select fullWidth color={"primary"} InputLabelProps={{shrink: true}} variant="outlined" label="Company" id="company" name="company" type="text" onChange={handleChange} value={values.company || ''} error={touched.company && Boolean(errors.company)} helperText={touched.company && errors.company}>
 								<MenuItem value = {"new"}>Add New</MenuItem>
 								<MenuItem value = {"Riverview Auto Tag and Title"}>Riverview Auto Tag and Title</MenuItem>
+							</TextField>
+							<TextField select fullWidth color={"primary"} InputLabelProps={{shrink: true}} variant="outlined" label="Role" id="role" name="role" type="text" onChange={handleChange} value={values.role} error={touched.role && Boolean(errors.role)} helperText={touched.role && errors.role}>
+								<MenuItem value = {"admin"}>Admin</MenuItem>
+								<MenuItem value = {"manager"}>Manager</MenuItem>
+								<MenuItem value = {"user"}>User</MenuItem>
 							</TextField>  
 						</Box>
 						<Box display="flex" justifyContent="center" paddingBottom = "20px">
