@@ -79,7 +79,7 @@ const CustIntake = () => {
                         </Box>
                         <Button type="submit" color={theme.palette.mode === "dark" ? "secondary" : "primary"} variant="contained" >Submit</Button>
                     </form>
-                ) }
+                )}
             </Formik>
         </Box>
     )
