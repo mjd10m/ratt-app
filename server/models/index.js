@@ -1,8 +1,9 @@
 const sequelize = require('../config/database');
 const User = require('./user');
 const Company = require('./company');
+const Price = require('./price') 
 
-const models = { User, Company };
+const models = { User, Company, Price };
 Object.values(models).forEach((model) => {
   if (model.associate) {
     model.associate(models);
@@ -15,5 +16,6 @@ sequelize.sync()
 
 module.exports = {
   User,
-  Company
+  Company,
+  Price
 };
